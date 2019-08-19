@@ -7,23 +7,27 @@ const H1 = styled.h1`
 `;
 
 const Slink = styled(Link)`
-    color:#fff;
-`
+    color: #fff;
+`;
 
 class People extends React.Component {
     state = { people: [], films: [] };
 
-    fetchResources = async () => {
+    fetchPeople = async () => {
         const peopleRes = await fetch('https://swapi.co/api/people/');
-        const filmRes = await fetch('https://swapi.co/api/films/');
-
         const peopleData = await peopleRes.json();
+        this.setState({ people: peopleData.results });
+    };
+
+    fetchFilms = async () => {
+        const filmRes = await fetch('https://swapi.co/api/films/');
         const filmData = await filmRes.json();
-        this.setState({ people: peopleData.results, films: filmData.results });
+        this.setState({ films: filmData.results });
     };
 
     componentDidMount() {
-        this.fetchResources();
+        this.fetchPeople();
+        this.fetchFilms();
     }
 
     getIdFromUrl(url) {
@@ -39,7 +43,9 @@ class People extends React.Component {
                     {this.state.people.map(person => {
                         return (
                             <li key={person.url}>
-                                <Slink to={{ pathname: `/people/${this.getIdFromUrl(person.url)}`, state: { person, films: this.state.films } }}>{person.name}</Slink>
+                                <Slink to={{ pathname: `/people/${this.getIdFromUrl(person.url)}`, state: { person, films: this.state.films } }}>
+                                    {person.name}
+                                </Slink>
                             </li>
                         );
                     })}
