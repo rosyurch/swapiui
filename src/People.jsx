@@ -43,7 +43,7 @@ class People extends React.Component {
                     {this.state.people.map(person => {
                         return (
                             <li key={person.url}>
-                                <Slink to={{ pathname: `/people/${this.getIdFromUrl(person.url)}`, state: { person, films: this.state.films } }}>
+                                <Slink to={{ pathname: `/people/${this.getIdFromUrl(person.url)}`, state: { people: this.state.people, person, films: this.state.films } }}>
                                     {person.name}
                                 </Slink>
                             </li>

@@ -8,9 +8,11 @@ const P = styled.p`
 
 function Person(props) {
     const { name, birth_year, films, vehicles, starships } = props.location.state.person;
+
     const movies = props.location.state.films.filter(film => {
         return films.includes(film.url);
     });
+
     const getIdFromUrl = url => {
         const urlArr = url.split('/');
         urlArr.pop()
@@ -29,7 +31,11 @@ function Person(props) {
                             <Link
                                 to={{
                                     pathname: `/film/${getIdFromUrl(film.url)}`,
-                                    state: { film }
+                                    state: {
+                                        films: props.location.state.films,
+                                        film,
+                                        people: props.location.state.people
+                                    }
                                 }}
                             >
                                 {film.title}

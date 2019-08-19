@@ -20,16 +20,13 @@ const Div = styled.div`
 function App() {
     return (
         <Router>
-
             <Div className="App">
-
                 <Route exact path="/" component={Home} />
                 <Route exact path="/people" component={People} />
                 <Route exact path="/people/:id" component={Person} />
                 {/* <Route exact path="/films/" /> */}
                 <Route exact path="/film/:id" component={Film} />
             </Div>
-
         </Router>
     );
 }
