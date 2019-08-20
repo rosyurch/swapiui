@@ -18,10 +18,10 @@ function Film(props) {
     return (
         <>
             <P>{title}</P>
-            <P>{episode}</P>
-            <P>{release_date}</P>
+            <P>Episode {episode}</P>
+            <P>Released: {release_date}</P>
             <ul>Characters:
-                {filmCharacers.map(char => <li key={char}> <Link
+                {filmCharacers.map(char => <li key={char.name}> <Link
                 to={{
                     pathname: `/people/${getIdFromUrl(char.url)}`,
                     state: {

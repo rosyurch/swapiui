@@ -8,7 +8,7 @@ const P = styled.p`
 
 function Person(props) {
     const { name, birth_year, films, vehicles, starships } = props.location.state.person;
-
+    console.log("FROM PERSON ", props.location.state.films)
     const movies = props.location.state.films.filter(film => {
         return films.includes(film.url);
     });

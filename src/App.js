@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import People from './People';
 import Home from './Home';
@@ -15,17 +15,30 @@ const Div = styled.div`
     margin: 0;
 `;
 
-
-
 function App() {
+    const [films, setFilms] = useState([]);
+
+    const fetchFilms = async () => {
+        const filmRes = await fetch('https://swapi.co/api/films/');
+        const filmData = await filmRes.json();
+        console.log(filmData)
+        setFilms(filmData.results);
+        // console.log(films)
+    };
+
+    useEffect(() => {
+        fetchFilms();
+    }, [])
+
     return (
         <Router>
             <Div className="App">
                 <Route exact path="/" component={Home} />
-                <Route exact path="/people" component={People} />
+                <Route exact path="/people" render={(match) => <People {...match} films={films} />} />
                 <Route exact path="/people/:id" component={Person} />
                 {/* <Route exact path="/films/" /> */}
                 <Route exact path="/film/:id" component={Film} />
+                <Route exact path="people?:page" render={(match) => <People {...match} films={films} />} />
             </Div>
         </Router>
     );

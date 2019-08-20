@@ -8,26 +8,36 @@ const H1 = styled.h1`
 
 const Slink = styled(Link)`
     color: #fff;
+    text-decoration: none;
 `;
 
 class People extends React.Component {
-    state = { people: [], films: [] };
+    state = { people: [], peopleNext: '', peoplePrev: '', };
 
     fetchPeople = async () => {
-        const peopleRes = await fetch('https://swapi.co/api/people/');
+        const peopleRes = await fetch(`https://swapi.co/api/people/${this.props.location.search && '?page=' + this.props.location.search[1]}`);
         const peopleData = await peopleRes.json();
-        this.setState({ people: peopleData.results });
+        this.setState({
+            people: peopleData.results,
+            peopleNext: peopleData.next,
+            peoplePrev: peopleData.previous
+        });
     };
 
-    fetchFilms = async () => {
-        const filmRes = await fetch('https://swapi.co/api/films/');
-        const filmData = await filmRes.json();
-        this.setState({ films: filmData.results });
-    };
+    // fetchFilms = async (msg) => {
+    //     const filmRes = await fetch('https://swapi.co/api/films/');
+    //     const filmData = await filmRes.json();
+    //     this.setState({ films: filmData.results });
+    //     // console.log(msg, this.state.films)
+    // };
 
     componentDidMount() {
+        console.log("MOUNT PEOPLE")
         this.fetchPeople();
-        this.fetchFilms();
+    }
+
+    componentDidUpdate() {
+        this.fetchPeople();
     }
 
     getIdFromUrl(url) {
@@ -35,7 +45,17 @@ class People extends React.Component {
         return Number(id[id.length - 2]);
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return (this.state.peopleNext !== nextState.peopleNext
+            || this.state.peoplePrev !== nextState.peoplePrev);
+    }
+
+
     render() {
+        const { peopleNext: next, peoplePrev: prev } = this.state;
+
+        console.log('RENDERRRR', this.props.films)
+
         return (
             <>
                 <H1>PEOPLE</H1>
@@ -43,13 +63,15 @@ class People extends React.Component {
                     {this.state.people.map(person => {
                         return (
                             <li key={person.url}>
-                                <Slink to={{ pathname: `/people/${this.getIdFromUrl(person.url)}`, state: { people: this.state.people, person, films: this.state.films } }}>
+                                <Slink to={{ pathname: `/people/${this.getIdFromUrl(person.url)}`, state: { people: this.state.people, person, films: this.props.films } }}>
                                     {person.name}
                                 </Slink>
                             </li>
                         );
                     })}
                 </ul>
+                {this.state.peoplePrev && <Slink onClick={() => this.setState({ peoplePrev: '' })} to={`/people?${prev[prev.length - 1]}`}>Previous </Slink>}
+                {this.state.peopleNext && <Slink onClick={() => this.setState({ peopleNext: '' })} to={`/people?${next[next.length - 1]}`}> Next</Slink>}
             </>
         );
     }
