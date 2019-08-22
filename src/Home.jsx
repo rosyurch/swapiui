@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-const style = { color: '#fff' };
+const style = { color: "#fff" };
 
 function Home(props) {
     return (
